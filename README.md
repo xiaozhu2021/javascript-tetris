@@ -63,7 +63,8 @@ MIT许可证。
 ---------------
 # blog
 
-Javascript俄罗斯方块
+### Javascript俄罗斯方块
+
 2011年10月10日，星期一
  
 
@@ -71,13 +72,10 @@ Javascript俄罗斯方块
 
 …考虑到这一点，我需要确保我的下一场比赛是一个简短的周末项目，所以我选择了一个简单的项目，并且我没有花任何时间来完善它……
 
-俄罗斯方块
-现在玩游戏
-查看源代码
-详细了解其工作原理
+
 如果没有修饰，它会有点丑陋，但是功能齐全，我可以向您展示如何自己实现它……
 
-实施细节
+#### 实施细节
 
 俄罗斯方块是一个非常容易实现的游戏，只是带有一些内联css / javascript的简单html文件。
 
@@ -93,7 +91,7 @@ Javascript俄罗斯方块
 听起来我们可以将每个模式表示为一个简单的16位整数，以确切定义我们希望每个片段旋转的方式：
 
 
-
+```
 var i = { blocks: [0x0F00, 0x2222, 0x00F0, 0x4444], color: 'cyan'   };
 var j = { blocks: [0x44C0, 0x8E00, 0x6440, 0x0E20], color: 'blue'   };
 var l = { blocks: [0x4460, 0x0E80, 0xC440, 0x2E00], color: 'orange' };
@@ -101,13 +99,19 @@ var o = { blocks: [0xCC00, 0xCC00, 0xCC00, 0xCC00], color: 'yellow' };
 var s = { blocks: [0x06C0, 0x8C40, 0x6C00, 0x4620], color: 'green'  };
 var t = { blocks: [0x0E40, 0x4C40, 0x4E00, 0x4640], color: 'purple' };
 var z = { blocks: [0x0C60, 0x4C80, 0xC600, 0x2640], color: 'red'    };
+
+```
 然后，我们可以提供一个给定的辅助方法：
 
 上面的一件
+
 旋转方向（0-3）
+
 俄罗斯方块网格上的位置
+
 …将遍历该块将占据的俄罗斯方块网格中的所有单元：
 
+```
 function eachblock(type, x, y, dir, fn) {
   var bit, result, row = 0, col = 0, blocks = type.blocks[dir];
   for(bit = 0x8000 ; bit > 0 ; bit = bit >> 1) {
@@ -120,9 +124,11 @@ function eachblock(type, x, y, dir, fn) {
     }
   }
 };
-有效件定位
-当左右滑动一块或将其放下时，我们需要注意边界检查。我们可以在eachblock帮助器的基础上提供一种occupied方法，如果将一块放置在俄罗斯方块网格上某个位置（具有特定旋转方向）所需的任何块都被占用或超出范围，则该方法返回true：
+```
+#### 有效件定位
 
+当左右滑动一块或将其放下时，我们需要注意边界检查。我们可以在eachblock帮助器的基础上提供一种occupied方法，如果将一块放置在俄罗斯方块网格上某个位置（具有特定旋转方向）所需的任何块都被占用或超出范围，则该方法返回true：
+```
 function occupied(type, x, y, dir) {
   var result = false
   eachblock(type, x, y, dir, function(x, y) {
@@ -135,13 +141,15 @@ function occupied(type, x, y, dir) {
 function unoccupied(type, x, y, dir) {
   return !occupied(type, x, y, dir);
 };
+```
 注意：假定getBlock返回true或false表示俄罗斯方块网格上的该位置是否已被占用。
 
-随机化下一块
+#### 随机化下一块
 选择下一个随机片段是一个有趣的难题。如果我们以纯粹随机的方式选择，例如：
-
+```
 var pieces = [i,j,l,o,s,t,z];
 var next = pieces[Math.round(Math.random(0, pieces.length-1))];
+```
 …我们发现游戏非常令人沮丧，因为我们经常得到相同类型的长序列，有时在相当长的一段时间内都没有得到想要的作品。
 
 在俄罗斯方块中挑选下一块的标准方法似乎是想象一个袋子，每个袋子有4个实例，我们从袋子中随机取出一个物品，直到它变空，然后冲洗并重复。
@@ -149,7 +157,7 @@ var next = pieces[Math.round(Math.random(0, pieces.length-1))];
 这样可以确保每28个片段中至少出现4次，也确保同一片段最多只能重复出现4次…从技术上讲，它最多可以重复8次，因为我们可以一个袋子末尾有一个4的链，然后在下一个袋子的开头有一个4的链，但是这种可能性很小。
 
 这使得游戏更具可玩性，因此我们实现如下randomPiece方法：
-
+```
 var pieces = [];
 function randomPiece() {
   if (pieces.length == 0)
@@ -157,11 +165,13 @@ function randomPiece() {
   var type = pieces.splice(random(0, pieces.length-1), 1)[0]; // remove a single piece
   return { type: type, dir: DIR.UP, x: 2, y: 0 };
 };
+```
 一旦我们有了数据结构和辅助方法，游戏的其余部分将变得非常简单。
 
-游戏常量和变量
-我们声明一些不变的常量：
+#### 游戏常量和变量
 
+我们声明一些不变的常量：
+```
 var KEY     = { ESC: 27, SPACE: 32, LEFT: 37, UP: 38, RIGHT: 39, DOWN: 40 },
     DIR     = { UP: 0, RIGHT: 1, DOWN: 2, LEFT: 3, MIN: 0, MAX: 3 },
     stats   = new Stats(),
@@ -173,8 +183,9 @@ var KEY     = { ESC: 27, SPACE: 32, LEFT: 37, UP: 38, RIGHT: 39, DOWN: 40 },
     nx      = 10, // width of tetris court (in blocks)
     ny      = 20, // height of tetris court (in blocks)
     nu      = 5;  // width/height of upcoming preview (in blocks)
+```
 以及可能会reset()针对每个游戏而改变的一些变量：
-
+```
 var dx, dy,        // pixel size of a single tetris block
     blocks,        // 2 dimensional array (nx*ny) representing tetris court - either empty block or occupied by a 'piece'
     actions,       // queue of user actions (inputs)
@@ -185,8 +196,9 @@ var dx, dy,        // pixel size of a single tetris block
     score,         // the current score
     rows,          // number of completed rows in the current game
     step;          // how long before current piece drops by 1 row
+```
 在更复杂的游戏中，这些都应该封装在一个或多个类中，但是为了使俄罗斯方块更简单，我们使用了简单的全局变量。但这并不意味着我们希望他们在整个代码中进行修改，因此为大多数可变游戏状态编写getter和setter方法仍然有意义。
-
+```
 function setScore(n)            { score = n; invalidateScore(); };
 function addScore(n)            { score = score + n; };
 function setRows(n)             { rows = n; step = Math.max(speed.min, speed.start - (speed.decrement*rows)); invalidateRows(); };
@@ -195,9 +207,12 @@ function getBlock(x,y)          { return (blocks && blocks[x] ? blocks[x][y] : n
 function setBlock(x,y,type)     { blocks[x] = blocks[x] || []; blocks[x][y] = type; invalidate(); };
 function setCurrentPiece(piece) { current = piece || randomPiece(); invalidate();     };
 function setNextPiece(piece)    { next    = piece || randomPiece(); invalidateNext(); };
+
+```
 这还使我们能够采用一种受控的方式来知道何时更改了值，以便我们可以invalidate访问UI并知道该部分需要重新呈现。这将使我们能够优化渲染，并且只有在draw事物发生变化时才能进行优化。
 
-游戏循环
+#### 游戏循环
+
 核心游戏循环是乒乓球，突围 和蛇循环的简化版本。使用requestAnimationFrame （或polyfill），我们只需要update根据时间间隔和draw结果来确定游戏状态：
 ```
 var last = now = timestamp();
@@ -228,7 +243,8 @@ function keydown(ev) {
 };
 
 ```
-玩游戏
+#### 玩游戏
+
 定义了数据结构，设置了常量和变量，提供了获取器和设置器，启动了游戏循环并处理了键盘输入之后，我们现在可以看看实现俄罗斯方块游戏机制的逻辑：
 
 该update循环由处理下一个用户操作组成，并且如果累积的时间大于某个变量（基于完成的行数），则将当前片段减少1行：
@@ -391,19 +407,19 @@ function drawBlock(ctx, x, y, color) {
   ctx.strokeRect(x*dx, y*dy, dx, dy)
 };
 ```
-改进空间
+#### 改进空间
 就像我说的，这只是俄罗斯方块游戏的原始机制。如果要完善此游戏，则需要添加以下内容：
 
-菜单
-等级
-高分数
-动画和效果
-音乐和声音效果
-触摸支持
-玩家对玩家
-玩家对战AI
-（等等）
+* 菜单
+* 等级
+* 高分数
+* 动画和效果
+* 音乐和声音效果
+* 触摸支持
+* 玩家对玩家
+* 玩家对战AI
+* （等等）
 
-游戏在桌面浏览器上播放效果最佳。抱歉，没有移动支持。
+##### 游戏在桌面浏览器上播放效果最佳。抱歉，没有移动支持。
 
-Chrome，Firefox，IE9 +，Safari，Opera
+###### Chrome，Firefox，IE9 +，Safari，Opera
