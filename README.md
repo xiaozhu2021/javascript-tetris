@@ -34,8 +34,11 @@ License
 * 玩游戏
 * 阅读博客文章
 * 查看源
-* >> _*支持的浏览器*: Chrome, Firefox, Safari, Opera and IE9+
+>> _*支持的浏览器*: Chrome, Firefox, Safari, Opera and IE9+
 
+### 游戏在桌面浏览器上玩耍效果最佳。抱歉，没有移动支持。
+
+在这里玩耍：https://xiaozhu2021.github.io/javascript-tetris/
 -----------
 
 ## 未来
