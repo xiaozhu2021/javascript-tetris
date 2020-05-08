@@ -25,4 +25,22 @@ License
 
 [MIT](http://en.wikipedia.org/wiki/MIT_License) license.
 
+-----------------
 
+Javascript俄罗斯方块
+HTML5俄罗斯方块游戏
+
+玩游戏
+阅读博客文章
+查看源
+支持的浏览器：Chrome，Firefox，Safari，Opera和IE9 +
+
+未来
+菜单
+动画和效果
+等级
+高分数
+触摸支持
+音乐和声音效果
+执照
+MIT许可证。
