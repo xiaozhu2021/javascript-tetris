@@ -3,7 +3,7 @@ Javascript Tetris
 
 An HTML5 Tetris Game
 
- * [play the game](http://codeincomplete.com/projects/tetris/)
+ * [play the game](https://xiaozhu2021.github.io/javascript-tetris/)
  * read a [blog article](http://codeincomplete.com/posts/2011/10/10/javascript_tetris/)
  * view the [source](https://github.com/jakesgordon/javascript-tetris)
 
